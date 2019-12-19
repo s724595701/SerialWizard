@@ -10,6 +10,14 @@
 
 extern QString utf82Gbk(const QString &inStr);
 
+extern QString fromUtf8(const QByteArray &data);
+
+extern QString fromGbk(const QByteArray &data);
+
+extern QByteArray toGbkByteArray(const QString &text);
+
+extern QByteArray toUtf8ByteArray(const QString &text);
+
 extern QString getTimestamp();
 
 
@@ -32,8 +40,6 @@ extern QString getIp();
 extern QByteArray dataToHex(const QByteArray &data);
 
 extern QByteArray dataFromHex(const QString &data);
-
-
 
 
 #endif //SERIALWIZARD_GLOBAL_H

@@ -45,6 +45,14 @@ Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = nullptr);
 
+    enum class SerialType {
+        Normal = 1,
+        TcpServer,
+        TcpClient,
+        Bridge,
+        SerialBridge,
+    };
+
     void init();
 
     void initUi();
@@ -55,8 +63,8 @@ public:
 
     ~MainWindow() override;
 
-    enum class SendType{
-       Normal, Line, Frame,FixedBytes
+    enum class SendType {
+        Normal, Line, Frame, FixedBytes
     };
 
 
@@ -98,6 +106,8 @@ public slots:
     void tool();
 
     void openDataValidator();
+
+    void openConvertDataDialog();
 
     void openFrameInfoSettingDialog();
 
@@ -151,7 +161,7 @@ private:
 
     void updateSendData(bool isHex, const QString &text);
 
-    void updateSendCount(qint64 count);
+    void updateSerialPortNames();
 
     void updateReceiveCount(qint64 count);
 
@@ -185,6 +195,7 @@ private:
     QAction *saveAct;
     QAction *exitAct;
     QAction *validateDataAct;
+    QAction *convertDataAct;
 
     AbstractReadWriter *_readWriter{nullptr};
 
@@ -192,9 +203,10 @@ private:
     qint64 receiveCount{0};
 
     QRadioButton *serialRadioButton;
-    QRadioButton *tcpRadioButton;
-    QRadioButton *brigdeRadioButton;
-
+    QRadioButton *tcpServerRadioButton;
+    QRadioButton *tcpClientRadioButton;
+    QRadioButton *bridgeRadioButton;
+    QRadioButton *serialBridgeRadioButton;
 
     QButtonGroup *readWriterButtonGroup;
 
@@ -205,6 +217,14 @@ private:
     QComboBox *serialPortDataBitsComboBox;
     QComboBox *serialPortStopBitsComboBox;
     QPushButton *openSerialButton;
+    QPushButton *refreshSerialButton;
+
+    // 第二串口设置
+    QComboBox *secondSerialPortNameComboBox;
+    QComboBox *secondSerialPortBaudRateComboBox;
+    QComboBox *secondSerialPortParityComboBox;
+    QComboBox *secondSerialPortDataBitsComboBox;
+    QComboBox *secondSerialPortStopBitsComboBox;
 
     // TCP设置
     QLineEdit *tcpAddressLineEdit;
@@ -225,6 +245,7 @@ private:
     QCheckBox *displaySendDataAsHexCheckBox;
     QCheckBox *autoSendCheckBox;
     QLineEdit *sendIntervalLineEdit;
+    QLineEdit *emptyLineDelayLindEdit;
     QPushButton *frameInfoSettingButton;
     QPushButton *saveSentDataButton;
     QPushButton *clearSentDataButton;
@@ -255,12 +276,17 @@ private:
 
     SerialController *serialController{nullptr};
 
-    int currentSendCount{0};
+//    int currentSendCount{0};
     int totalSendCount{0};
 
     bool _loopSend{false};
 
-    SendType _sendType{SendType ::Normal};
+    SendType _sendType{SendType::Normal};
+
+    SerialType _serialType{SerialType::Normal};
+
+    int skipSendCount{0};
+
 };
 
 
